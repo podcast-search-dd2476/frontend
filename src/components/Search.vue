@@ -16,7 +16,7 @@
             <h4> episode index: {{index}} </h4>
             <div v-for="(episode, index) in podcasts" :key="index">
                 <a v-bind:href="'https://open.spotify.com/episode/' + episode.episode_data.episode_uri.split(':')[2]" target="_blank" rel="noopener noreferrer"> {{episode.episode_data.episode_name}} </a>
-                <p> episode length: {{episode.episode_data.duration }} </p>
+                <p> <b>Length:</b> <span v-if="Math.floor((episode.episode_data.duration) / 60) !== 0">{{Math.floor((episode.episode_data.duration) / 60)}}h</span> {{Math.round(episode.episode_data.duration % 60)}}m {{Math.round((episode.episode_data.duration % 1)*60)}}s </p>
                 <div class="bg-block" v-for="segment in episode.transcript.transcripts" :key="segment.index">
                     <p>
                         <span> startTime: {{segment.startTime }} </span>
