@@ -11,12 +11,13 @@
     </div>
     <h2>Top 10 Results: </h2>
     <ul>
-        <li v-for="item in podData" :key="item.transcript._id">
-            <div class="bg-block" v-if="item.pod_data">
-                <h3> {{item.pod_data.hits.hits[0]._source.podcast_name}} </h3>
-                <a v-bind:href="'https://open.spotify.com/episode/' + item.episode_data.episode_uri.split(':')[2]" target="_blank" rel="noopener noreferrer"> {{item.episode_data.episode_name}} </a>
-                <p> episode length: {{item.episode_data.duration }} </p>
-                <div class="bg-block" v-for="segment in item.transcript.transcripts" :key="segment.index">
+        <div v-for="(podcasts, index) in podData" :key="index" class="bg-block">
+            <h3 v-if="podcasts[0].pod_data"> {{podcasts[0].pod_data.hits.hits[0]._source.podcast_name}} </h3>
+            <h4> episode index: {{index}} </h4>
+            <div v-for="(episode, index) in podcasts" :key="index">
+                <a v-bind:href="'https://open.spotify.com/episode/' + episode.episode_data.episode_uri.split(':')[2]" target="_blank" rel="noopener noreferrer"> {{episode.episode_data.episode_name}} </a>
+                <p> episode length: {{episode.episode_data.duration }} </p>
+                <div class="bg-block" v-for="segment in episode.transcript.transcripts" :key="segment.index">
                     <p>
                         <span> startTime: {{segment.startTime }} </span>
                         <span> endTime: {{segment.endTime }} </span>
@@ -25,7 +26,7 @@
                     <p> {{segment.transcript}} </p>
                 </div>
             </div>
-        </li>
+        </div>
     </ul>
   </div>
 </template>
@@ -55,7 +56,7 @@ export default {
         })
         .then(res => {
             console.log(res.data)
-            this.podData = res.data.results
+            this.podData = res.data
         })
         .catch(err => {
             console.log(err)
