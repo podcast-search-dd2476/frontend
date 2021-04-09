@@ -15,7 +15,10 @@
             <div class="bg-block" v-if="item.pod_data">
                 <h3> {{item.pod_data.hits.hits[0]._source.podcast_name}} </h3>
                 <a v-bind:href="'https://open.spotify.com/episode/' + item.episode_data.episode_uri.split(':')[2]" target="_blank" rel="noopener noreferrer"> {{item.episode_data.episode_name}} </a>
-                <p> {{item.transcript._source.transcript}} </p>
+                <p> episode length: {{item.episode_data.duration }} </p>
+                <p> {{item.transcript.transcript}} </p>
+                <p> startTime: {{item.transcript.startTime }} </p>
+                <p> endTime: {{item.transcript.endTime }} </p>
             </div>
         </li>
     </ul>
@@ -41,7 +44,8 @@ export default {
         axios.get("http://localhost:5000/", {
             params: {
                 search: this.searchTerm,
-                type: match
+                type: match,
+                size: 100
             }
         })
         .then(res => {
