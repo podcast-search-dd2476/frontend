@@ -16,9 +16,14 @@
                 <h3> {{item.pod_data.hits.hits[0]._source.podcast_name}} </h3>
                 <a v-bind:href="'https://open.spotify.com/episode/' + item.episode_data.episode_uri.split(':')[2]" target="_blank" rel="noopener noreferrer"> {{item.episode_data.episode_name}} </a>
                 <p> episode length: {{item.episode_data.duration }} </p>
-                <p> {{item.transcript.transcript}} </p>
-                <p> startTime: {{item.transcript.startTime }} </p>
-                <p> endTime: {{item.transcript.endTime }} </p>
+                <div class="bg-block" v-for="segment in item.transcript.transcripts" :key="segment.index">
+                    <p>
+                        <span> startTime: {{segment.startTime }} </span>
+                        <span> endTime: {{segment.endTime }} </span>
+                        <span> segment index: {{segment.index}} </span>
+                    </p>
+                    <p> {{segment.transcript}} </p>
+                </div>
             </div>
         </li>
     </ul>
@@ -45,7 +50,7 @@ export default {
             params: {
                 search: this.searchTerm,
                 type: match,
-                size: 100
+                size: 50
             }
         })
         .then(res => {
