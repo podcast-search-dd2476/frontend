@@ -14,7 +14,7 @@
         <li v-for="item in podData" :key="item.transcript._id">
             <div class="bg-block" v-if="item.pod_data">
                 <h3> {{item.pod_data.hits.hits[0]._source.podcast_name}} </h3>
-                <h4> {{item.episode_data.episode_name}} </h4>
+                <a v-bind:href="'https://open.spotify.com/episode/' + item.episode_data.episode_uri.split(':')[2]" target="_blank" rel="noopener noreferrer"> {{item.episode_data.episode_name}} </a>
                 <p> {{item.transcript._source.transcript}} </p>
             </div>
         </li>
