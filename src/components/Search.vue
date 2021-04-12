@@ -24,10 +24,10 @@
                 <p> <b>Length:</b> <span v-if="Math.floor((episode.episode_data.duration) / 60) !== 0">{{Math.floor((episode.episode_data.duration) / 60)}}h</span> {{Math.round(episode.episode_data.duration % 60)}}m {{Math.round((episode.episode_data.duration % 1)*60)}}s </p>
                 <div class="bg-block" v-for="segment in episode.transcript.transcripts" :key="segment.index">
                     <p>
-                        <span> startTime: {{segment.startTime }} </span>
-                        <span> endTime: {{segment.endTime }} </span>
-                        <span> segment index: {{segment.index}} </span>
+                        <span v-bind:title="segment.startTime"><b>Starts at:</b> {{ secondsToHMS(segment.startTime) }} </span>
+                        <span v-bind:title="segment.endTime"><b>Ends at:</b> {{ secondsToHMS(segment.endTime) }}</span>
                     </p>
+                    <p>segment index: {{segment.index}}</p>
                     <Transcript v-bind:transcript="segment.transcript" v-bind:searchTerm="searchTerm" v-bind:phrase="matchType"/>
                 </div>
             </div>
@@ -53,6 +53,19 @@ export default {
       Transcript
   },
   methods: {
+      secondsToHMS(timeAsString = "") {
+        let duration = timeAsString.replace("s", "")
+        let result = ""
+        let hours = Math.floor((duration) / 3600)
+        let minutes = Math.floor((duration / 60) % 60)
+        let seconds = Math.floor((duration % 3600) % 60)
+        
+        if (hours > 0) result += hours + "h "
+        if (minutes > 0) result += minutes + "m "
+        result += seconds + "s"
+
+        return result
+      },
       search() {
         let match = "match"
         if (this.matchType) {
@@ -100,6 +113,10 @@ h3 {
 
 .bg-block {
     background-color: #F0EFEF;
+}
+
+.bg-block p {
+    margin: 0
 }
 
 .input-field {

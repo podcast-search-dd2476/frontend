@@ -84,5 +84,16 @@ export default {
 </script>
 
 <style scoped>
+* {
+    font-style: italic;
+    font-size: 14px;
+    color: rgb(114, 114, 114);
+}
+p {
+    padding: 15px;
+}
 
+p::after {
+    content: " ...";
+}
 </style>
