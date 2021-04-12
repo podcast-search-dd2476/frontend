@@ -2,15 +2,20 @@
   <div class="content">
     <h1>Search for podcast content: </h1>
     <div>
+        <form>
         <input class="clear-right margin-1 input-field" v-model="searchTerm" />
-        <label for="checkbox">Check for phrase search</label>
+        <label for="checkbox">Phrase search</label>
         <input type="checkbox" id="checkbox" v-model="matchType">
         <div class="margin-1">
-            <button class="search-button" @click.prevent="search" >Search</button>
+            <button class="search-button" @click.prevent="search" v-bind:disabled="searchTerm.length === 0" >Search</button>
         </div>
+        </form>
     </div>
-    <h2>Top 10 Results: </h2>
-    <ul>
+    <div class="center" v-if="this.searching">
+        <img v-bind:src="'/spinner.gif'"/>
+    </div>
+    <h2 v-if="!this.searching && this.podData.length !== 0">Found {{podData.length}} results in {{this.took / 1000}} seconds</h2>
+    <ul v-if="!this.searching">
         <div v-for="(podcasts, index) in podData" :key="index" class="bg-block">
             <h3 v-if="podcasts[0].pod_data"> {{podcasts[0].pod_data.hits.hits[0]._source.podcast_name}} </h3>
             <h4> episode index: {{index}} </h4>
@@ -39,7 +44,9 @@ export default {
   data: () => ({
       searchTerm: "",
       matchType: false,
-      podData: []
+      podData: [],
+      took: undefined,
+      searching: false,
   }),
   methods: {
       search() {
@@ -47,6 +54,7 @@ export default {
         if (this.matchType) {
             match = "match_phrase"
         }
+        this.searching = true
         axios.get("http://localhost:5000/", {
             params: {
                 search: this.searchTerm,
@@ -56,10 +64,13 @@ export default {
         })
         .then(res => {
             console.log(res.data)
-            this.podData = res.data
+            this.podData = res.data.results
+            this.took = res.data.took
+            this.searching = false
         })
         .catch(err => {
             console.log(err)
+            this.searching = false
         });
       }
   }
@@ -103,5 +114,12 @@ h3 {
 
 ul {
     list-style-type: none;
+}
+
+.center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 50vh;
 }
 </style>
