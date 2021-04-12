@@ -28,7 +28,7 @@
                         <span> endTime: {{segment.endTime }} </span>
                         <span> segment index: {{segment.index}} </span>
                     </p>
-                    <p> {{segment.transcript}} </p>
+                    <Transcript v-bind:transcript="segment.transcript" v-bind:searchTerm="searchTerm" v-bind:phrase="matchType"/>
                 </div>
             </div>
         </div>
@@ -38,6 +38,7 @@
 
 <script>
 import axios from "axios"
+import Transcript from './Transcript.vue'
 
 export default {
   name: 'Search',
@@ -48,6 +49,9 @@ export default {
       took: undefined,
       searching: false,
   }),
+  components: {
+      Transcript
+  },
   methods: {
       search() {
         let match = "match"
