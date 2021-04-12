@@ -14,7 +14,7 @@
     <div class="center" v-if="this.searching">
         <img v-bind:src="'/spinner.gif'"/>
     </div>
-    <h2 v-if="!this.searching && this.podData.length !== 0">Found {{podData.length}} results in {{this.took / 1000}} seconds</h2>
+    <h2 v-if="!this.searching && this.took !== undefined">Found {{podData.length}} result(s) in {{this.took / 1000}} seconds</h2>
     <ul v-if="!this.searching">
         <div v-for="(podcasts, index) in podData" :key="index" class="bg-block">
             <h3 v-if="podcasts[0].pod_data"> {{podcasts[0].pod_data.hits.hits[0]._source.podcast_name}} </h3>
