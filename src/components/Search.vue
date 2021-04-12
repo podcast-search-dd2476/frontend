@@ -17,7 +17,7 @@
     <h2 v-if="!this.searching && this.took !== undefined">Found {{podData.length}} result(s) in {{this.took / 1000}} seconds</h2>
     <ul v-if="!this.searching">
         <div v-for="(podcasts, index) in podData" :key="index" class="bg-block">
-            <h3 v-if="podcasts[0].pod_data"> {{podcasts[0].pod_data.hits.hits[0]._source.podcast_name}} </h3>
+            <h3 v-if="podcasts[0].pod_data"> {{podcasts[0].pod_data.podcast_name}} </h3>
             <h4> episode index: {{index}} </h4>
             <div v-for="(episode, index) in podcasts" :key="index">
                 <a v-bind:href="'https://open.spotify.com/episode/' + episode.episode_data.episode_uri.split(':')[2]" target="_blank" rel="noopener noreferrer"> {{episode.episode_data.episode_name}} </a>
@@ -55,7 +55,7 @@ export default {
             match = "match_phrase"
         }
         this.searching = true
-        axios.get("http://localhost:5000/", {
+        axios.get("http://localhost:5000/search", {
             params: {
                 search: this.searchTerm,
                 type: match,
