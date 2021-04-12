@@ -7,7 +7,7 @@
         <label for="checkbox">Phrase search</label>
         <input type="checkbox" id="checkbox" v-model="matchType">
         <div class="margin-1">
-            <button class="search-button" @click.prevent="search" v-bind:disabled="searchTerm.length === 0" >Search</button>
+            <button class="search-button" @click.prevent="search" v-bind:disabled="searchTerm.length === 0 || this.searching" >Search</button>
         </div>
         </form>
     </div>
