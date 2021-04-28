@@ -1,46 +1,73 @@
 <template>
-  <div class="content">
-    <h1>Search for podcast content: </h1>
-    <div>
-        <form>
-        <input class="clear-right margin-1 input-field" v-model="searchTerm" />
-        <h4>Search settings:</h4>
-        <div>
-        <label for="checkbox">Phrase search </label>
-        <input type="checkbox" id="checkbox" v-model="matchType">
+  <v-content>
+    <v-container>
+        <v-form>
+            <v-row>
+                <v-col cols="12" sm="8" md="8">
+                    <v-text-field
+                        placeholder="Search podcast content.."
+                        outlined
+                        v-model="searchTerm"
+                    ></v-text-field>
+                </v-col>
+                <v-col cols="12" sm="4" md="4">
+                    <v-btn large color="primary" @click.prevent="search" v-bind:disabled="searchTerm.length === 0 || this.searching" >Search</v-btn>
+                </v-col>
+            </v-row>
+            <v-row>
+                <v-col
+                    cols="12"
+                    sm="4"
+                    md="4"
+                >
+                    <v-checkbox label="Phrase search" type="checkbox" id="checkbox" v-model="matchType"></v-checkbox>
+                </v-col>
+                                <v-col
+                    cols="12"
+                    sm="4"
+                    md="4"
+                >
+                    <v-text-field label="Maximum number of results" type="number" id="numResults" v-model="numResults"></v-text-field>
+                </v-col>
+            </v-row>
+        </v-form>
+    </v-container>
+    <v-container>
+        <div class="center" v-if="this.searching">
+            <img v-bind:src="'/spinner.gif'"/>
         </div>
-        <div>
-        <label for="numResults">Maximum number of results </label>
-        <input type="number" id="numResults" v-model="numResults">
-        </div>
-        <div class="margin-1">
-            <button class="search-button" @click.prevent="search" v-bind:disabled="searchTerm.length === 0 || this.searching" >Search</button>
-        </div>
-        </form>
-    </div>
-    <div class="center" v-if="this.searching">
-        <img v-bind:src="'/spinner.gif'"/>
-    </div>
-    <h2 v-if="!this.searching && this.took !== undefined">Found {{podData.length}} episode(s) in {{this.took / 1000}} seconds</h2>
-    <ul class="result-list" v-if="!this.searching">
-        <div v-for="(podcasts, index) in podData" :key="index" class="bg-block">
-            <h3 v-if="podcasts[0].pod_data"> {{podcasts[0].pod_data.podcast_name}} </h3>
-            <h4> episode index: {{index}} </h4>
-            <div v-for="(episode, index) in podcasts" :key="index">
-                <a v-bind:href="'https://open.spotify.com/episode/' + episode.episode_data.episode_uri.split(':')[2]" target="_blank" rel="noopener noreferrer"> {{episode.episode_data.episode_name}} </a>
-                <p> <b>Length:</b> <span v-if="Math.floor((episode.episode_data.duration) / 60) !== 0">{{Math.floor((episode.episode_data.duration) / 60)}}h</span> {{Math.round(episode.episode_data.duration % 60)}}m {{Math.round((episode.episode_data.duration % 1)*60)}}s </p>
-                <div class="bg-block" v-for="segment in episode.transcript.transcripts" :key="segment.index">
-                    <p>
-                        <span v-bind:title="segment.startTime"><b>Starts at:</b> {{ secondsToHMS(segment.startTime) }} </span>
-                        <span v-bind:title="segment.endTime"><b>Ends at:</b> {{ secondsToHMS(segment.endTime) }}</span>
-                    </p>
-                    <p>segment index: {{segment.index}}</p>
-                    <Transcript v-bind:transcript="segment.transcript" v-bind:searchTerm="searchTerm" v-bind:phrase="matchType"/>
-                </div>
-            </div>
-        </div>
-    </ul>
-  </div>
+        <h2 v-if="!this.searching && this.took !== undefined">Found {{podData.length}} episode{{podData.length > 1 ? 's' : ''}} in {{this.took / 1000}} seconds</h2>
+        <v-expansion-panels v-if="!this.searching">
+            <v-expansion-panel v-for="(podcasts, index) in podData" :key="index">
+                <v-expansion-panel-header>
+                    <p v-if="podcasts[0].pod_data"> <b>{{podcasts[0].pod_data.podcast_name}} </b> ({{podcasts.length}} matching episode{{podcasts.length > 1 ? 's' : ''}})</p>
+                </v-expansion-panel-header>
+                <v-expansion-panel-content>
+                    <v-expansion-panels>
+                        <v-expansion-panel v-for="(episode, index) in podcasts" :key="index">
+                            <v-expansion-panel-header>
+                                <p> {{episode.episode_data.episode_name}} 
+                                    <span><a v-bind:href="'https://open.spotify.com/episode/' + episode.episode_data.episode_uri.split(':')[2]" target="_blank" rel="noopener noreferrer"> to episode </a></span>
+                                </p>
+                            </v-expansion-panel-header>
+                            <v-expansion-panel-content>
+                                <p> <b>Episode length:</b> <span v-if="Math.floor((episode.episode_data.duration) / 60) !== 0">{{Math.floor((episode.episode_data.duration) / 60)}}h</span> {{Math.round(episode.episode_data.duration % 60)}}m {{Math.round((episode.episode_data.duration % 1)*60)}}s </p>
+                                <div v-for="segment in episode.transcript.transcripts" :key="segment.index">
+                                    <p>
+                                        <span>Relevant segment </span>
+                                        <span v-bind:title="segment.startTime"><b>starts at:</b> {{ secondsToHMS(segment.startTime) }} </span>
+                                        <span v-bind:title="segment.endTime"><b>and ends at:</b> {{ secondsToHMS(segment.endTime) }}</span>
+                                    </p>
+                                    <Transcript v-bind:transcript="segment.transcript" v-bind:searchTerm="searchTerm" v-bind:phrase="matchType"/>
+                                </div>
+                            </v-expansion-panel-content>
+                        </v-expansion-panel>
+                    </v-expansion-panels>
+                </v-expansion-panel-content>
+            </v-expansion-panel>
+        </v-expansion-panels>
+    </v-container>
+  </v-content>
 </template>
 
 <script>

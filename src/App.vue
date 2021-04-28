@@ -1,29 +1,35 @@
 <template>
-  <div id="app">
-    <Search />
-  </div>
+  <v-app>
+    <v-app-bar
+      app
+      color="primary"
+      dark
+    >
+      <div class="d-flex align-center">
+          <h1>Podcast search</h1>
+      </div>
+
+      <v-spacer></v-spacer>
+    </v-app-bar>
+
+    <v-main>
+      <Search/>
+    </v-main>
+  </v-app>
 </template>
 
 <script>
-import Search from './components/Search.vue'
+import Search from './components/Search';
 
 export default {
   name: 'App',
+
   components: {
     Search,
-  }
-}
-</script>
+  },
 
-<style>
-#app {
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-* {
-  font-family: 'Poppins', sans-serif;
-}
-</style>
+  data: () => ({
+    //
+  }),
+};
+</script>
