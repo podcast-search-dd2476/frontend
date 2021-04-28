@@ -4,8 +4,15 @@
     <div>
         <form>
         <input class="clear-right margin-1 input-field" v-model="searchTerm" />
-        <label for="checkbox">Phrase search</label>
+        <h4>Search settings:</h4>
+        <div>
+        <label for="checkbox">Phrase search </label>
         <input type="checkbox" id="checkbox" v-model="matchType">
+        </div>
+        <div>
+        <label for="numResults">Maximum number of results </label>
+        <input type="number" id="numResults" v-model="numResults">
+        </div>
         <div class="margin-1">
             <button class="search-button" @click.prevent="search" v-bind:disabled="searchTerm.length === 0 || this.searching" >Search</button>
         </div>
@@ -14,8 +21,8 @@
     <div class="center" v-if="this.searching">
         <img v-bind:src="'/spinner.gif'"/>
     </div>
-    <h2 v-if="!this.searching && this.took !== undefined">Found {{podData.length}} result(s) in {{this.took / 1000}} seconds</h2>
-    <ul v-if="!this.searching">
+    <h2 v-if="!this.searching && this.took !== undefined">Found {{podData.length}} episode(s) in {{this.took / 1000}} seconds</h2>
+    <ul class="result-list" v-if="!this.searching">
         <div v-for="(podcasts, index) in podData" :key="index" class="bg-block">
             <h3 v-if="podcasts[0].pod_data"> {{podcasts[0].pod_data.podcast_name}} </h3>
             <h4> episode index: {{index}} </h4>
@@ -45,6 +52,7 @@ export default {
   data: () => ({
       searchTerm: "",
       matchType: false,
+      numResults: 50,
       podData: [],
       took: undefined,
       searching: false,
@@ -76,7 +84,7 @@ export default {
             params: {
                 search: this.searchTerm,
                 type: match,
-                size: 50
+                size: this.numResults
             }
         })
         .then(res => {
@@ -142,5 +150,9 @@ ul {
     justify-content: center;
     align-items: center;
     height: 50vh;
+}
+
+.result-list {
+    padding: 0;
 }
 </style>
