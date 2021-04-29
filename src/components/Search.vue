@@ -1,5 +1,5 @@
 <template>
-  <v-content>
+  <v-main>
     <v-container>
         <v-form>
             <v-row>
@@ -15,18 +15,10 @@
                 </v-col>
             </v-row>
             <v-row>
-                <v-col
-                    cols="12"
-                    sm="4"
-                    md="4"
-                >
+                <v-col cols="12" sm="4" md="4">
                     <v-checkbox label="Phrase search" type="checkbox" id="checkbox" v-model="matchType"></v-checkbox>
                 </v-col>
-                                <v-col
-                    cols="12"
-                    sm="4"
-                    md="4"
-                >
+                <v-col cols="12" sm="4" md="4">
                     <v-text-field label="Maximum number of results" type="number" id="numResults" v-model="numResults"></v-text-field>
                 </v-col>
             </v-row>
@@ -67,7 +59,7 @@
             </v-expansion-panel>
         </v-expansion-panels>
     </v-container>
-  </v-content>
+  </v-main>
 </template>
 
 <script>
