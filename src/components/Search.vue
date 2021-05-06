@@ -25,7 +25,7 @@
         </v-form>
     </v-container>
     <v-container>
-        <div class="center" v-if="this.searching">
+        <div v-if="this.searching">
             <img v-bind:src="'/spinner.gif'"/>
         </div>
         <h2 v-if="!this.searching && this.took !== undefined">Found {{podData.length}} episode{{podData.length > 1 ? 's' : ''}} in {{this.took / 1000}} seconds</h2>
@@ -125,53 +125,5 @@ export default {
 div {
     text-align: left;
 }
-h3 {
-  margin: 40px 0 0;
-}
-.content {
-    margin: 1rem;
-}
-.clear-right {
-    display: block;
-}
-.margin-1 {
-    margin: 1rem 0 1rem 0;
-}
 
-.bg-block {
-    background-color: #F0EFEF;
-}
-
-.bg-block p {
-    margin: 0
-}
-
-.input-field {
-    padding: 0.2rem;
-    border-radius: 4px;
-    border: 1px solid lightgray;
-    width: 50%;
-}
-
-.search-button {
-    padding: 0.5rem;
-    border-radius: 4px;
-    background-color: lightblue;
-    border-style: none;
-}
-
-ul {
-    list-style-type: none;
-}
-
-.center {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 50vh;
-}
-
-.result-list {
-    padding: 0;
-}
 </style>
