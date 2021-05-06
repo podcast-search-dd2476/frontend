@@ -99,7 +99,7 @@ export default {
             match = "match_phrase"
         }
         this.searching = true
-        axios.get("http://localhost:5000/search", {
+        axios.get("http://localhost:5000/api/search", {
             params: {
                 search: this.searchTerm,
                 type: match,
