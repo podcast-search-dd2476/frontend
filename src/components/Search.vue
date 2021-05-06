@@ -25,7 +25,7 @@
         </v-form>
     </v-container>
     <v-container>
-        <div v-if="this.searching">
+        <div v-if="this.searching" class="center">
             <img v-bind:src="'/spinner.gif'"/>
         </div>
         <h2 v-if="!this.searching && this.took !== undefined">Found {{podData.length}} episode{{podData.length > 1 ? 's' : ''}} in {{this.took / 1000}} seconds</h2>
@@ -99,7 +99,7 @@ export default {
             match = "match_phrase"
         }
         this.searching = true
-        axios.get("/api/search", {
+        axios.get("http://localhost:5000/api/search", {
             params: {
                 search: this.searchTerm,
                 type: match,
@@ -124,6 +124,13 @@ export default {
 <style scoped>
 div {
     text-align: left;
+}
+
+.center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 50vh;
 }
 
 </style>
