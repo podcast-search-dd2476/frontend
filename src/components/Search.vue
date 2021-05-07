@@ -28,7 +28,7 @@
         <div v-if="this.searching" class="center">
             <img v-bind:src="'/spinner.gif'"/>
         </div>
-        <h2 v-if="!this.searching && this.took !== undefined">Found {{podData.length}} episode{{podData.length > 1 ? 's' : ''}} in {{this.took / 1000}} seconds</h2>
+        <h2 v-if="!this.searching && this.took !== undefined">Found {{podData.length}} matching podcast{{podData.length > 1 ? 's' : ''}} in {{this.took / 1000}} seconds</h2>
         <v-expansion-panels v-if="!this.searching">
             <v-expansion-panel v-for="(podcasts, index) in podData" :key="index">
                 <v-expansion-panel-header>
